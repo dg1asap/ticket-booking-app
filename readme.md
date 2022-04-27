@@ -21,8 +21,9 @@ Download and install the software below
 ### Installation
 
 1. Clone the repo
-   ```git clone https://github.com/dg1asap/ticket-booking-app.git
-   ```
+```
+git clone https://github.com/dg1asap/ticket-booking-app.git
+```
 2. Compile and run App with the .sh file
 ```
 ./buildAndRun.sh
@@ -36,7 +37,7 @@ Download and install the software below
 ```
 
 
-###The commands carry out the options listed below.
+### The commands carry out the options listed below.
 
 1. Returns a complete list of all movie shows available in the database
 2. Returns the list of movie shows broadcast in a given period.
@@ -51,7 +52,7 @@ Download and install the software below
 
 <img src="./images/useCase.png" width="500" height="300">
 
-###Examples of REST API manual test paths:
+### Examples of REST API manual test paths:
 
 Above is an example response from the service to operation number 8. With this operation we tried to reserve 5 seats for a screening for Johnny Depp. First 4 were successful. The 5th seat was a treatment to reserve a seat that is assigned to a different room. A more detailed description of the error can be found in the service console. After selecting option 8 again, we will no longer be able to book selected seats because they have already been booked by us. If we want to find out how much tickets in the shopping cart cost in total, we will use option number 5. Finally, we can display the list of available seats for the movie shows booked by us and check if there are any reserved seats on it. If we do not remember the id of the seats we have purchased, we can always check it with option number 6.
 
