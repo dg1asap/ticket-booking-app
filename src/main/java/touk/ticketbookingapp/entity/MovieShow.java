@@ -34,12 +34,12 @@ public class MovieShow implements PeriodicEvent {
     }
 
     @Override
-    public LocalDateTime getStartAsLocalDateTime() {
+    public LocalDateTime getStart() {
         return start;
     }
 
     @Override
-    public LocalDateTime getEndAsLocalDateTime() {
+    public LocalDateTime getEnd() {
         return end;
     }
 

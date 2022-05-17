@@ -10,8 +10,8 @@ public class MovieShowSortingComparator implements Comparator<MovieShow> {
     public int compare(MovieShow firstShow, MovieShow secondShow) {
         String firstMovieTitle = firstShow.getMovie().getTittle();
         String secondMovieTitle = secondShow.getMovie().getTittle();
-        LocalDateTime startOfFirstShow = firstShow.getStartAsLocalDateTime();
-        LocalDateTime startOfSecondShow = secondShow.getStartAsLocalDateTime();
+        LocalDateTime startOfFirstShow = firstShow.getStart();
+        LocalDateTime startOfSecondShow = secondShow.getStart();
 
         int compareMovieTitle = firstMovieTitle.compareTo(secondMovieTitle);
         int compareStartOfShow = startOfFirstShow.compareTo(startOfSecondShow);

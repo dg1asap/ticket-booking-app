@@ -58,34 +58,6 @@ public class MovieShowTest {
     }
 
     @Test
-    public void getDayOfStartAsStringTest() {
-        assertEquals("15/04/2022", firstMovieShow.getDayOfStartAsString());
-        assertEquals("15/04/2022", secondMovieShow.getDayOfStartAsString());
-        assertEquals("30/10/2023", thirdMovieShow.getDayOfStartAsString());
-    }
-
-    @Test
-    public void getTimeOfStartAsStringTest() {
-        assertEquals("15:30", firstMovieShow.getTimeOfStartAsString());
-        assertEquals("20:15", secondMovieShow.getTimeOfStartAsString());
-        assertEquals("10:00", thirdMovieShow.getTimeOfStartAsString());
-    }
-
-    @Test
-    public void getDayOfEndAsStringTest() {
-        assertEquals("15/04/2022", firstMovieShow.getDayOfEndAsString());
-        assertEquals("15/04/2022", secondMovieShow.getDayOfEndAsString());
-        assertEquals("30/10/2023", thirdMovieShow.getDayOfEndAsString());
-    }
-
-    @Test
-    public void getTimeOfEndAsStringTest() {
-        assertEquals("19:30", firstMovieShow.getTimeOfEndAsString());
-        assertEquals("23:15", secondMovieShow.getTimeOfEndAsString());
-        assertEquals("20:00", thirdMovieShow.getTimeOfEndAsString());
-    }
-
-    @Test
     public void createReservationForCustomerTest() {
         try {
             Customer tom = new Customer("Tom", "Smith");

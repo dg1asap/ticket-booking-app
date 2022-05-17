@@ -55,30 +55,6 @@ public class ReservationTest {
     }
 
     @Test
-    public void getDayOfStartAsStringTest() {
-        assertEquals("20/05/2022", firstReservation.getDayOfStartAsString());
-        assertEquals("20/07/2022", secondReservation.getDayOfStartAsString());
-    }
-
-    @Test
-    public void getTimeOfStartAsStringTest() {
-        assertEquals("15:00", firstReservation.getTimeOfStartAsString());
-        assertEquals("12:00", secondReservation.getTimeOfStartAsString());
-    }
-
-    @Test
-    public void getDayOfEndAsStringTest() {
-        assertEquals("20/05/2022", firstReservation.getDayOfEndAsString());
-        assertEquals("20/07/2022", secondReservation.getDayOfEndAsString());
-    }
-
-    @Test
-    public void getTimeOfEndAsStringTest() {
-        assertEquals("18:00", firstReservation.getTimeOfEndAsString());
-        assertEquals("15:00", secondReservation.getTimeOfEndAsString());
-    }
-
-    @Test
     public void getAndSetRoomNumberTest() {
         try {
             firstReservation.setRoomNumber(1);
