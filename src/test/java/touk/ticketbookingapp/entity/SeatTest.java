@@ -3,8 +3,7 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -102,19 +101,15 @@ public class SeatTest {
 
     private static void createFirstMovieShow() {
         Movie granTorino = new Movie("Gran Torino");
-        Calendar start = new GregorianCalendar();
-        Calendar end = new GregorianCalendar();
-        start.set(2022, 4, 15, 10, 30,0);
-        end.set(2022, 4, 15, 15, 30,0);
+        LocalDateTime start = LocalDateTime.of(2022, 4, 15, 10, 30,0);
+        LocalDateTime end = LocalDateTime.of(2022, 4, 15, 15, 30,0);
         firstMovieShow = new MovieShow(1234, granTorino, start, end);
     }
 
     private static void createSecondMovieShow() {
         Movie leon = new Movie("Leon");
-        Calendar start = new GregorianCalendar();
-        Calendar end = new GregorianCalendar();
-        start.set(2022, 5, 16, 15, 30,0);
-        end.set(2022, 5, 16, 20, 30,0);
+        LocalDateTime start = LocalDateTime.of(2022, 5, 16, 15, 30,0);
+        LocalDateTime end = LocalDateTime.of(2022, 5, 16, 20, 30,0);
         secondMovieShow = new MovieShow(1234, leon, start, end);
     }
 

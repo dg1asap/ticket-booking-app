@@ -1,49 +1,49 @@
 package touk.ticketbookingapp.entity;
 
-import touk.ticketbookingapp.mapper.CalendarToStringConverter;
+import touk.ticketbookingapp.mapper.LocalDateTimeToStringConverter;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public interface PeriodicEvent {
-    Calendar getStartAsCalendar();
+    LocalDateTime getStartAsLocalDateTime();
 
-    Calendar getEndAsCalendar();
+    LocalDateTime getEndAsLocalDateTime();
 
     default String getDayOfStartAsString() {
-        Calendar start = getStartAsCalendar();
-        return CalendarToStringConverter.convertDate(start);
+        LocalDateTime start = getStartAsLocalDateTime();
+        return LocalDateTimeToStringConverter.convertDate(start);
     }
 
     default String getTimeOfStartAsString() {
-        Calendar start = getStartAsCalendar();
-        return CalendarToStringConverter.convertTime(start);
+        LocalDateTime start = getStartAsLocalDateTime();
+        return LocalDateTimeToStringConverter.convertTime(start);
     }
 
     default String getDayOfEndAsString() {
-        Calendar end = getEndAsCalendar();
-        return CalendarToStringConverter.convertDate(end);
+        LocalDateTime end = getEndAsLocalDateTime();
+        return LocalDateTimeToStringConverter.convertDate(end);
     }
 
     default String getTimeOfEndAsString() {
-        Calendar end = getEndAsCalendar();
-        return CalendarToStringConverter.convertTime(end);
+        LocalDateTime end = getEndAsLocalDateTime();
+        return LocalDateTimeToStringConverter.convertTime(end);
     }
 
     default boolean isOverlappingWith(PeriodicEvent event) {
-        Calendar thisStart = this.getStartAsCalendar();
-        Calendar thisEnd = this.getEndAsCalendar();
+        LocalDateTime thisStart = this.getStartAsLocalDateTime();
+        LocalDateTime thisEnd = this.getEndAsLocalDateTime();
 
-        Calendar eventStart = event.getStartAsCalendar();
-        Calendar eventEnd = event.getEndAsCalendar();
+        LocalDateTime eventStart = event.getStartAsLocalDateTime();
+        LocalDateTime eventEnd = event.getEndAsLocalDateTime();
 
-        return thisStart.before(eventEnd) && eventStart.before(thisEnd);
+        return thisStart.isBefore(eventEnd) && eventStart.isBefore(thisEnd);
     }
 
-    default boolean isOverlappingWith(Calendar eventStart, Calendar eventEnd) {
-        Calendar thisStart = this.getStartAsCalendar();
-        Calendar thisEnd = this.getEndAsCalendar();
+    default boolean isOverlappingWith(LocalDateTime eventStart, LocalDateTime eventEnd) {
+        LocalDateTime thisStart = this.getStartAsLocalDateTime();
+        LocalDateTime thisEnd = this.getEndAsLocalDateTime();
 
-        return thisStart.before(eventEnd) && eventStart.before(thisEnd);
+        return thisStart.isBefore(eventEnd) && eventStart.isBefore(thisEnd);
     }
 
 }

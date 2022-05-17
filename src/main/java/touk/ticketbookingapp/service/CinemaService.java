@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import touk.ticketbookingapp.entity.*;
 import touk.ticketbookingapp.repository.CinemaRepository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -17,7 +18,7 @@ public class CinemaService {
         return cinemaRepository.getMovieShows();
     }
 
-    public List<MovieShow> getSortedMovieShowsInPeriod(Calendar fromCalendar, Calendar toCalendar) {
+    public List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime fromCalendar, LocalDateTime toCalendar) {
         return cinemaRepository.getSortedMovieShowsInPeriod(fromCalendar, toCalendar);
     }
 

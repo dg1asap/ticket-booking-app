@@ -1,14 +1,14 @@
 package touk.ticketbookingapp.entity;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class MovieShow implements PeriodicEvent {
     private final int Id;
     private final Movie movie;
-    private final Calendar start;
-    private final Calendar end;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
 
-    public MovieShow(int Id, Movie movie, Calendar start, Calendar end) {
+    public MovieShow(int Id, Movie movie, LocalDateTime start, LocalDateTime end) {
         this.Id = Id;
         this.movie = movie;
         this.start = start;
@@ -34,19 +34,18 @@ public class MovieShow implements PeriodicEvent {
     }
 
     @Override
-    public Calendar getStartAsCalendar() {
+    public LocalDateTime getStartAsLocalDateTime() {
         return start;
     }
 
     @Override
-    public Calendar getEndAsCalendar() {
+    public LocalDateTime getEndAsLocalDateTime() {
         return end;
     }
 
     private boolean isAtLeastNMinutesBeforeMovie(int minutes) {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, 15);
-        return now.before(start);
+        LocalDateTime now = LocalDateTime.now();
+        return now.plusMinutes(15).isBefore(start);
     }
 
 

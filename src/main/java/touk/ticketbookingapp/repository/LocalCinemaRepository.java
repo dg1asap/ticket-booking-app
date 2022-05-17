@@ -3,7 +3,10 @@ package touk.ticketbookingapp.repository;
 import org.springframework.stereotype.Repository;
 import touk.ticketbookingapp.entity.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
+
+import static java.time.LocalDateTime.of;
 
 @Repository
 public class LocalCinemaRepository implements CinemaRepository {
@@ -15,53 +18,32 @@ public class LocalCinemaRepository implements CinemaRepository {
         movieShowRoomMap = new HashMap<>();
         customers = new ArrayList<>();
 
-        Calendar start1 = new GregorianCalendar();
-        Calendar start2 = new GregorianCalendar();
-        Calendar start3 = new GregorianCalendar();
-        Calendar start4 = new GregorianCalendar();
-        Calendar start5 = new GregorianCalendar();
-        Calendar start6 = new GregorianCalendar();
-        Calendar start7 = new GregorianCalendar();
-        Calendar start8 = new GregorianCalendar();
-        Calendar start9 = new GregorianCalendar();
-        Calendar start10 = new GregorianCalendar();
+        LocalDateTime start1 = LocalDateTime.of(2022, 1, 1, 6, 0);
+        LocalDateTime start2 = LocalDateTime.of(2022, 1, 1, 12, 0);
+        LocalDateTime start3 = LocalDateTime.of(2022, 1, 1, 16, 15);
+        LocalDateTime start4 = LocalDateTime.of(2022, 1, 1, 21, 30);
 
-        Calendar end1 = new GregorianCalendar();
-        Calendar end2 = new GregorianCalendar();
-        Calendar end3 = new GregorianCalendar();
-        Calendar end4 = new GregorianCalendar();
-        Calendar end5 = new GregorianCalendar();
-        Calendar end6 = new GregorianCalendar();
-        Calendar end7 = new GregorianCalendar();
-        Calendar end8 = new GregorianCalendar();
-        Calendar end9 = new GregorianCalendar();
-        Calendar end10 = new GregorianCalendar();
+        LocalDateTime start5 = LocalDateTime.of(2022, 5, 27, 10, 0);
+        LocalDateTime start6 = LocalDateTime.of(2022, 5, 27, 15, 20);
+        LocalDateTime start7 = LocalDateTime.of(2022, 5, 27, 20, 0);
 
-        start1.set(2022, 1, 1, 6, 0);
-        start2.set(2022, 1, 1, 12, 0);
-        start3.set(2022, 1, 1, 16, 15);
-        start4.set(2022, 1, 1, 21, 30);
+        LocalDateTime start8 = LocalDateTime.of(2022, 10, 28, 9, 0);
+        LocalDateTime start9 = LocalDateTime.of(2022, 10, 28, 17, 10);
+        LocalDateTime start10 = LocalDateTime.of(2022, 10, 28, 20, 0);
 
-        start5.set(2022, 5, 27, 10, 0);
-        start6.set(2022, 5, 27, 15, 20);
-        start7.set(2022, 5, 27, 20, 0);
 
-        start8.set(2022, 10, 28, 9, 0);
-        start9.set(2022, 10, 28, 17, 10);
-        start10.set(2022, 10, 28, 20, 0);
+        LocalDateTime end1 = LocalDateTime.of(2022, 1, 1, 10, 0);
+        LocalDateTime end2 = LocalDateTime.of(2022, 1, 1, 14, 20);
+        LocalDateTime end3 = LocalDateTime.of(2022, 1, 1, 19, 20);
+        LocalDateTime end4 = LocalDateTime.of(2022, 1, 1, 23, 30);
 
-        end1.set(2022, 1, 1, 10, 0);
-        end2.set(2022, 1, 1, 14, 20);
-        end3.set(2022, 1, 1, 19, 20);
-        end4.set(2022, 1, 1, 23, 30);
+        LocalDateTime end5 = LocalDateTime.of(2022, 5, 27, 12, 0);
+        LocalDateTime end6 = LocalDateTime.of(2022, 5, 27, 18, 15);
+        LocalDateTime end7 = LocalDateTime.of(2022, 5, 27, 22, 0);
 
-        end5.set(2022, 5, 27, 12, 0);
-        end6.set(2022, 5, 27, 18, 15);
-        end7.set(2022, 5, 27, 22, 0);
-
-        end8.set(2022, 10, 28, 11, 30);
-        end9.set(2022, 10, 28, 18, 0);
-        end10.set(2022, 10, 28, 21, 0);
+        LocalDateTime end8 = LocalDateTime.of(2022, 10, 28, 11, 30);
+        LocalDateTime end9 = LocalDateTime.of(2022, 10, 28, 18, 0);
+        LocalDateTime end10 = LocalDateTime.of(2022, 10, 28, 21, 0);
 
         Movie fightClub = new Movie("Fight Club");
         Movie granTorino = new Movie("Gran Torino");
@@ -75,6 +57,7 @@ public class LocalCinemaRepository implements CinemaRepository {
         MovieShow movieShow4 = new MovieShow(1004, fightClub, start4, end4);
 
         MovieShow movieShow5 = new MovieShow(1005, seven, start5, end5);
+
         MovieShow movieShow6 = new MovieShow(1006, trumanShow, start6, end6);
         MovieShow movieShow7 = new MovieShow(1007, batman, start7, end7);
 
@@ -127,7 +110,7 @@ public class LocalCinemaRepository implements CinemaRepository {
     }
 
     @Override
-    public List<MovieShow> getSortedMovieShowsInPeriod(Calendar from, Calendar to) {
+    public List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime from, LocalDateTime to) {
         List<MovieShow> movieShows = getMovieShowsInPeriod(from, to);
         return sortMovieShowsByTitleAndStart(movieShows);
     }
@@ -176,7 +159,7 @@ public class LocalCinemaRepository implements CinemaRepository {
         throw new NoSuchElementException("No screening with id: " + id);
     }
 
-    private List<MovieShow> getMovieShowsInPeriod(Calendar from, Calendar to) {
+    private List<MovieShow> getMovieShowsInPeriod(LocalDateTime from, LocalDateTime to) {
         return movieShowRoomMap.keySet().stream()
                 .filter(movieShow -> movieShow.isOverlappingWith(from, to))
                 .toList();

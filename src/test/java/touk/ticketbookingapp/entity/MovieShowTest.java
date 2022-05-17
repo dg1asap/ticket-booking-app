@@ -3,8 +3,7 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,22 +19,16 @@ public class MovieShowTest {
         granTorino = new Movie("Gran Torino");
         grandFather = new Movie("Grandfather");
 
-        Calendar firstMovieStart = new GregorianCalendar();
-        Calendar firstMovieEnd = new GregorianCalendar();
-        firstMovieStart.set(2022, 4, 15, 15, 30);
-        firstMovieEnd.set(2022, 4, 15, 19, 30);
+        LocalDateTime firstMovieStart = LocalDateTime.of(2022, 4, 15, 15, 30);
+        LocalDateTime firstMovieEnd = LocalDateTime.of(2022, 4, 15, 19, 30);
         firstMovieShow = new MovieShow(1234, granTorino, firstMovieStart, firstMovieEnd);
 
-        Calendar secondMovieStart = new GregorianCalendar();
-        Calendar secondMovieEnd = new GregorianCalendar();
-        secondMovieStart.set(2022, 4, 15, 20, 15);
-        secondMovieEnd.set(2022, 4, 15, 23, 15);
+        LocalDateTime secondMovieStart = LocalDateTime.of(2022, 4, 15, 20, 15);
+        LocalDateTime secondMovieEnd = LocalDateTime.of(2022, 4, 15, 23, 15);
         secondMovieShow = new MovieShow(1235, granTorino, secondMovieStart, secondMovieEnd);
 
-        Calendar thirdMovieStart = new GregorianCalendar();
-        Calendar thirdMovieEnd = new GregorianCalendar();
-        thirdMovieStart.set(2023, 10, 30, 10, 0);
-        thirdMovieEnd.set(2023, 10, 30, 20, 0);
+        LocalDateTime thirdMovieStart = LocalDateTime.of(2023, 10, 30, 10, 0);
+        LocalDateTime thirdMovieEnd = LocalDateTime.of(2023, 10, 30, 20, 0);
         thirdMovieShow = new MovieShow(9998, grandFather, thirdMovieStart, thirdMovieEnd);
     }
 
@@ -66,8 +59,8 @@ public class MovieShowTest {
 
     @Test
     public void getDayOfStartAsStringTest() {
-        assertEquals("15/4/2022", firstMovieShow.getDayOfStartAsString());
-        assertEquals("15/4/2022", secondMovieShow.getDayOfStartAsString());
+        assertEquals("15/04/2022", firstMovieShow.getDayOfStartAsString());
+        assertEquals("15/04/2022", secondMovieShow.getDayOfStartAsString());
         assertEquals("30/10/2023", thirdMovieShow.getDayOfStartAsString());
     }
 
@@ -80,8 +73,8 @@ public class MovieShowTest {
 
     @Test
     public void getDayOfEndAsStringTest() {
-        assertEquals("15/4/2022", firstMovieShow.getDayOfEndAsString());
-        assertEquals("15/4/2022", secondMovieShow.getDayOfEndAsString());
+        assertEquals("15/04/2022", firstMovieShow.getDayOfEndAsString());
+        assertEquals("15/04/2022", secondMovieShow.getDayOfEndAsString());
         assertEquals("30/10/2023", thirdMovieShow.getDayOfEndAsString());
     }
 
@@ -113,7 +106,7 @@ public class MovieShowTest {
     }
 
     @Test
-    public void isInOverlappingWithCalendarTest() {
+    public void isInOverlappingWithLocalDateTimeTest() {
         assertTrue(is15April2022(firstMovieShow));
         assertTrue(is15April2022(secondMovieShow));
         assertFalse(is15April2022(thirdMovieShow));
@@ -145,21 +138,15 @@ public class MovieShowTest {
     }
 
     private boolean is15April2022(MovieShow movieShow) {
-        Calendar start = new GregorianCalendar();
-        start.set(2022, 4, 15, 0, 0);
-
-        Calendar end = new GregorianCalendar();
-        end.set(2022, 4, 15, 23, 59);
+        LocalDateTime start = LocalDateTime.of(2022, 4, 15, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2022, 4, 15, 23, 59);
 
         return movieShow.isOverlappingWith(start, end);
     }
 
     private boolean isIn2023(MovieShow movieShow) {
-        Calendar start = new GregorianCalendar();
-        start.set(2023, 1, 1, 0, 0);
-
-        Calendar end = new GregorianCalendar();
-        end.set(2023, 12, 31, 23, 59);
+        LocalDateTime start = LocalDateTime.of(2023, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2023, 12, 31, 23, 59);
 
         return movieShow.isOverlappingWith(start, end);
     }

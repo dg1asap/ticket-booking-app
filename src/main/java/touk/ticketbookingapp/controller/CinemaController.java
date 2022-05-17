@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import touk.ticketbookingapp.entity.*;
-import touk.ticketbookingapp.mapper.StringToCalendarConverter;
+import touk.ticketbookingapp.mapper.StringToLocalDateTimeConverter;
 import touk.ticketbookingapp.service.CinemaService;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -27,10 +28,10 @@ public class CinemaController {
     public ResponseEntity<List<MovieShow>> getMovieShowsInPeriod(
             @RequestParam String from,  @RequestParam String to) {
 
-        Calendar fromCalendar = StringToCalendarConverter.convert(from);
-        Calendar toCalendar = StringToCalendarConverter.convert(to);
+        LocalDateTime fromLocalDateTime = StringToLocalDateTimeConverter.convert(from);
+        LocalDateTime toLocalDateTime = StringToLocalDateTimeConverter.convert(to);
 
-        List<MovieShow> movieShows = cinemaService.getSortedMovieShowsInPeriod(fromCalendar, toCalendar);
+        List<MovieShow> movieShows = cinemaService.getSortedMovieShowsInPeriod(fromLocalDateTime, toLocalDateTime);
         return new ResponseEntity<>(movieShows, HttpStatus.OK);
     }
 

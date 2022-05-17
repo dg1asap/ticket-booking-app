@@ -3,8 +3,7 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,16 +30,12 @@ public class RoomTest {
     private static void createMoviesShow() {
         Movie granTorino = new Movie("Gran Torino");
 
-        Calendar firstMovieStart = new GregorianCalendar();
-        Calendar firstMovieEnd = new GregorianCalendar();
-        firstMovieStart.set(2023, 4, 15, 10, 30,0);
-        firstMovieEnd.set(2023, 4, 15, 15, 30,0);
+        LocalDateTime firstMovieStart = LocalDateTime.of(2023, 4, 15, 10, 30,0);
+        LocalDateTime firstMovieEnd = LocalDateTime.of(2023, 4, 15, 15, 30,0);
         earlierMovieShow = new MovieShow(1234, granTorino, firstMovieStart, firstMovieEnd);
 
-        Calendar secondMovieStart = new GregorianCalendar();
-        Calendar secondMovieEnd = new GregorianCalendar();
-        secondMovieStart.set(2023, 4, 15, 18, 15,0);
-        secondMovieEnd.set(2023, 4, 15, 20, 15,0);
+        LocalDateTime secondMovieStart = LocalDateTime.of(2023, 4, 15, 18, 15,0);
+        LocalDateTime secondMovieEnd = LocalDateTime.of(2023, 4, 15, 20, 15,0);
         laterMovieShow = new MovieShow(1235, granTorino, secondMovieStart, secondMovieEnd);
     }
 

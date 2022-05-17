@@ -3,17 +3,16 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReservationTest {
 
-    private static Calendar startOfFirstReservation;
-    private static Calendar endOfFirstReservation;
-    private static Calendar startOfSecondReservation;
-    private static Calendar endOfSecondReservation;
+    private static LocalDateTime startOfFirstReservation;
+    private static LocalDateTime endOfFirstReservation;
+    private static LocalDateTime startOfSecondReservation;
+    private static LocalDateTime endOfSecondReservation;
     private static Customer tom;
     private static Customer eva;
     private static Reservation firstReservation;
@@ -39,7 +38,7 @@ public class ReservationTest {
     }
 
     @Test
-    public void isOverlappingWithCalendarTest() {
+    public void isOverlappingWithLocalDateTimeTest() {
         assertTrue(firstReservation.isOverlappingWith(startOfFirstReservation, endOfFirstReservation));
         assertTrue(firstReservation.isOverlappingWith(startOfFirstReservation, endOfSecondReservation));
         assertFalse(firstReservation.isOverlappingWith(startOfSecondReservation,endOfSecondReservation));
@@ -57,8 +56,8 @@ public class ReservationTest {
 
     @Test
     public void getDayOfStartAsStringTest() {
-        assertEquals("20/5/2022", firstReservation.getDayOfStartAsString());
-        assertEquals("20/7/2022", secondReservation.getDayOfStartAsString());
+        assertEquals("20/05/2022", firstReservation.getDayOfStartAsString());
+        assertEquals("20/07/2022", secondReservation.getDayOfStartAsString());
     }
 
     @Test
@@ -69,8 +68,8 @@ public class ReservationTest {
 
     @Test
     public void getDayOfEndAsStringTest() {
-        assertEquals("20/5/2022", firstReservation.getDayOfEndAsString());
-        assertEquals("20/7/2022", secondReservation.getDayOfEndAsString());
+        assertEquals("20/05/2022", firstReservation.getDayOfEndAsString());
+        assertEquals("20/07/2022", secondReservation.getDayOfEndAsString());
     }
 
     @Test
@@ -119,31 +118,22 @@ public class ReservationTest {
     }
 
     private static void createFirstReservationFor(Customer customer) {
-        startOfFirstReservation = new GregorianCalendar();
-        startOfFirstReservation.set(2022, 5, 20, 15, 0);
-
-        endOfFirstReservation = new GregorianCalendar();
-        endOfFirstReservation.set(2022, 5, 20, 18, 0);
+        startOfFirstReservation = LocalDateTime.of(2022, 5, 20, 15, 0);
+        endOfFirstReservation = LocalDateTime.of(2022, 5, 20, 18, 0);
 
         firstReservation = new Reservation(startOfFirstReservation, endOfFirstReservation, customer);
     }
 
     private static void createSecondReservationFor(Customer customer) {
-        startOfSecondReservation = new GregorianCalendar();
-        startOfSecondReservation.set(2022, 7, 20, 12, 0);
-
-        endOfSecondReservation = new GregorianCalendar();
-        endOfSecondReservation.set(2022, 7, 20, 15, 0);
+        startOfSecondReservation = LocalDateTime.of(2022, 7, 20, 12, 0);
+        endOfSecondReservation = LocalDateTime.of(2022, 7, 20, 15, 0);
 
         secondReservation = new Reservation(startOfSecondReservation, endOfSecondReservation, customer);
     }
 
     private static void createOverlappingReservation(Customer customer) {
-        Calendar start = new GregorianCalendar();
-        start.set(1990, 1, 1, 1, 0);
-
-        Calendar end = new GregorianCalendar();
-        end.set(2030, 1, 1, 1, 0);
+        LocalDateTime start = LocalDateTime.of(1990, 1, 1, 1, 0);
+        LocalDateTime end = LocalDateTime.of(2030, 1, 1, 1, 0);
 
         overlappingReservation = new Reservation(start, end, customer);
     }

@@ -1,16 +1,16 @@
 package touk.ticketbookingapp.entity;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class Reservation implements PeriodicEvent {
-    private final Calendar start;
-    private final Calendar end;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
     private final Customer booker;
     private int roomNumber;
     private int row;
     private int column;
 
-    public Reservation(Calendar form, Calendar to, Customer booker) {
+    public Reservation(LocalDateTime form, LocalDateTime to, Customer booker) {
         this.start = form;
         this.end = to;
         this.booker = booker;
@@ -24,12 +24,12 @@ public class Reservation implements PeriodicEvent {
     }
 
     @Override
-    public Calendar getStartAsCalendar() {
+    public LocalDateTime getStartAsLocalDateTime() {
         return start;
     }
 
     @Override
-    public Calendar getEndAsCalendar() {
+    public LocalDateTime getEndAsLocalDateTime() {
         return end;
     }
 
