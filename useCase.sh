@@ -4,10 +4,10 @@
 echo "COMMAND LIST"
 echo "1. GET /movie-shows"
 echo "2. GET /movie-shows/period/"
-echo "3. GET /room/movie-shows/{id}"
+echo "3. GET /movie-shows/{id}/room"
 echo "4. GET /movie-shows/{id}/available-seats"
 echo "5. GET /customer/"
-echo "6. GET /customer/reservation/screening/{id}/"
+echo "6. GET /customer/reservation/movie-show-id/{id}/"
 echo "7. GET /customer/reservation/"
 echo "8. PUT /customer/reservation/movie-show/{movie-show-id}/seat/{seat-id}"
 echo "9. PUT /customer/relief/"
@@ -35,7 +35,7 @@ case $choice in
       echo "You have selected the option 2"
       echo "This option";;
   # Pattern 3
-  3)  curl http://localhost:8080/room/movie-shows/1010 | json_pp
+  3)  curl http://localhost:8080/movie-shows/1010/room | json_pp
       echo "You have selected the option 3"
       echo " ";;    
   # Pattern 4
@@ -60,35 +60,35 @@ case $choice in
 	--data-raw '{
 	    "name": "Johnny",
 	    "surname": "Depp"
-	}'
+	}' | json_pp
 
 	curl --location --request PUT 'http://localhost:8080/customer/reservation/movie-show/1010/seat/9800504/' \
 	--header 'Content-Type: application/json' \
 	--data-raw '{
 	    "name": "Johnny",
 	    "surname": "Depp"
-	}'
+	}' | json_pp
 
 	curl --location --request PUT 'http://localhost:8080/customer/reservation/movie-show/1010/seat/9800505/' \
 	--header 'Content-Type: application/json' \
 	--data-raw '{
 	    "name": "Johnny",
 	    "surname": "Depp"
-	}'
+	}' | json_pp
 
 	curl --location --request PUT 'http://localhost:8080/customer/reservation/movie-show/1010/seat/9800506/' \
 	--header 'Content-Type: application/json' \
 	--data-raw '{
 	    "name": "Johnny",
 	    "surname": "Depp"
-	}'
+	}' | json_pp
 
 	curl --location --request PUT 'http://localhost:8080/customer/reservation/movie-show/1010/seat/9800207/' \
 	--header 'Content-Type: application/json' \
 	--data-raw '{
 	    "name": "Johnny",
 	    "surname": "Depp"
-	}'
+	}' | json_pp
       echo "You have selected the option 8"
       echo " ";;    
   # Pattern 9

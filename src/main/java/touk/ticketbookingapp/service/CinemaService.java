@@ -44,7 +44,12 @@ public class CinemaService {
     }
 
     public void addCustomer(Customer customer) {
-        cinemaRepository.addCustomer(customer);
+        try {
+            cinemaRepository.addCustomer(customer);
+        } catch (NoSuchElementException e) {
+            System.out.println("Customer with name " + customer.getName() + " and surname " + customer.getSurname() + " exist in database");
+            throw e;
+        }
     }
 
     public List<Seat> getAvailableSeatsOnMovieShow(int movieShowId) {
