@@ -15,7 +15,6 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CinemaControllerAcceptanceTest {
-
     @Autowired
     private MockMvc mockMvc;
 

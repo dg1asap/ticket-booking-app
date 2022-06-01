@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import touk.ticketbookingapp.entity.Customer;
 import touk.ticketbookingapp.entity.Reservation;
-import touk.ticketbookingapp.service.CinemaService;
+import touk.ticketbookingapp.service.CustomerService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,14 +14,23 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("customer")
 public class CustomerController {
+    private final CustomerService service;
     @Autowired
-    CinemaService cinemaService;
+    public CustomerController(CustomerService service) {
+        this.service = service;
+    }
 
     @GetMapping("/")
-    public Customer getCustomer(
+    public ResponseEntity<Customer> getCustomer(
             @RequestParam String name,
             @RequestParam String surname) {
-        return cinemaService.getCustomerWithNameAndSurname(name, surname);
+        try {
+            Customer customer = service.getCustomerWithNameAndSurname(name, surname);
+            return new ResponseEntity<>(customer, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new Customer(name, surname), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/reservation/movie-show/{movie-show-id}/")
@@ -30,7 +39,7 @@ public class CustomerController {
             @RequestParam("name-of-customer") String nameOfCustomer,
             @RequestParam("surname-of-customer") String surnameOfCustomer) {
 
-        return cinemaService.getReservationOfCustomerOnMovieShow(
+        return service.getReservationOfCustomerOnMovieShow(
                 nameOfCustomer, surnameOfCustomer, movieShowId);
     }
 
@@ -39,7 +48,7 @@ public class CustomerController {
             @RequestParam("name-of-customer") String nameOfCustomer,
             @RequestParam("surname-of-customer") String surnameOfCustomer) {
 
-        return cinemaService.getReservationOfCustomer(
+        return service.getReservationOfCustomer(
                 nameOfCustomer, surnameOfCustomer);
     }
 
@@ -53,9 +62,9 @@ public class CustomerController {
         String surname = customerPrototype.getSurname();
 
         try {
-            cinemaService.bookingSeatOnMovieShowForCustomer(seatId, movieShowId, name, surname);
+            service.bookingSeatOnMovieShowForCustomer(seatId, movieShowId, name, surname);
             return new ResponseEntity<>(customerPrototype, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
+        } catch (IllegalStateException e) {
             return new ResponseEntity<>(customerPrototype, HttpStatus.NOT_FOUND);
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(customerPrototype, HttpStatus.BAD_REQUEST);
@@ -68,7 +77,7 @@ public class CustomerController {
             @PathVariable String surname,
             @PathVariable("relief-type") String reliefType) {
 
-        cinemaService.setCustomerReliefType(name, surname, reliefType);
+        service.setCustomerReliefType(name, surname, reliefType);
         return reliefType;
     }
 
@@ -77,7 +86,7 @@ public class CustomerController {
             @RequestBody Customer customer) {
 
         try {
-            cinemaService.addCustomer(customer);
+            service.addCustomer(customer);
             return new ResponseEntity<>(customer, HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(customer, HttpStatus.CONFLICT);

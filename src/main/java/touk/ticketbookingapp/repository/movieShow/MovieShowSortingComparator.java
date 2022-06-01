@@ -1,4 +1,4 @@
-package touk.ticketbookingapp.repository;
+package touk.ticketbookingapp.repository.movieShow;
 
 import touk.ticketbookingapp.entity.MovieShow;
 
