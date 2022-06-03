@@ -23,6 +23,8 @@ public class LocalMovieShowRepository implements MovieShowRepository {
 
     @Override
     public Set<MovieShow> getMovieShows() {
+        if (movieShowRoomMap.size() == 0)
+            throw new NoSuchElementException("Movie show database is clear");
         return movieShowRoomMap.keySet();
     }
 
@@ -33,8 +35,8 @@ public class LocalMovieShowRepository implements MovieShowRepository {
 
     @Override
     public List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime from, LocalDateTime to) {
-        List<MovieShow> movieShows = getMovieShowsInPeriod(from, to);
-        return sortMovieShowsByTitleAndStart(movieShows);
+            List<MovieShow> movieShows = getMovieShowsInPeriod(from, to);
+            return sortMovieShowsByTitleAndStart(movieShows);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class LocalMovieShowRepository implements MovieShowRepository {
                     .collect(Collector.toSingleton());
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
-            throw new NoSuchElementException("[Not found] Movie show with id " + id + " not found");
+            throw new NoSuchElementException("Movie show with id " + id + " not found");
         }
     }
 

@@ -2,6 +2,7 @@ package touk.ticketbookingapp.entity;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import touk.ticketbookingapp.exception.customer.CustomerException;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +22,12 @@ public class ReservationTest {
 
     @BeforeAll
     public static void createReservations() {
-        tom = new Customer("Tom", "Smith");
-        eva = new Customer("Eva", "Polka");
+        try {
+            tom = new Customer("Tom", "Smith");
+            eva = new Customer("Eva", "Polka");
+        } catch (CustomerException e) {
+            System.out.println(e.getMessage());
+        }
 
         createFirstReservationFor(tom);
         createSecondReservationFor(eva);

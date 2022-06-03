@@ -22,19 +22,30 @@ public class MovieShowController {
     }
 
     @GetMapping("")
-    public Set<MovieShow> getMovieShows() {
-        return service.getMovieShows();
+    public ResponseEntity<Set<MovieShow>> getMovieShows() {
+        try {
+            Set<MovieShow> movieShows = service.getMovieShows();
+            return new ResponseEntity<>(movieShows, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     //example format:   7:20-1/2/2022
     @GetMapping("/period/")
-    public List<MovieShow> getMovieShowsInPeriod(
-            @RequestParam String from,  @RequestParam String to) {
+    public ResponseEntity<List<MovieShow>> getMovieShowsInPeriod(
+            @RequestParam("from") String fromAsString,  @RequestParam("to") String toAsString) {
 
-        LocalDateTime fromLocalDateTime = StringToLocalDateTimeConverter.convert(from);
-        LocalDateTime toLocalDateTime = StringToLocalDateTimeConverter.convert(to);
-
-        return service.getSortedMovieShowsInPeriod(fromLocalDateTime, toLocalDateTime);
+        try {
+            LocalDateTime form = StringToLocalDateTimeConverter.convert(fromAsString);
+            LocalDateTime to = StringToLocalDateTimeConverter.convert(toAsString);
+            List<MovieShow> movieShows = service.getSortedMovieShowsInPeriod(form, to);
+            return new ResponseEntity<>(movieShows, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/room")
@@ -49,8 +60,14 @@ public class MovieShowController {
     }
 
     @GetMapping("/{id}/available-seats")
-    public List<Seat> getAvailableSeatsOnMovieShow(@PathVariable int id) {
-        return service.getAvailableSeatsOnMovieShow(id);
+    public ResponseEntity<List<Seat>> getAvailableSeatsOnMovieShow(@PathVariable int id) {
+        try {
+            List<Seat> seats = service.getAvailableSeatsOnMovieShow(id);
+            return new ResponseEntity<>(seats, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
 

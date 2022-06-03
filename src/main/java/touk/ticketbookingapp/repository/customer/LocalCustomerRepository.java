@@ -2,6 +2,7 @@ package touk.ticketbookingapp.repository.customer;
 
 import org.springframework.stereotype.Repository;
 import touk.ticketbookingapp.entity.Customer;
+import touk.ticketbookingapp.exception.customer.CustomerException;
 import touk.ticketbookingapp.util.Collector;
 
 import java.util.ArrayList;
@@ -18,9 +19,12 @@ public class LocalCustomerRepository implements CustomerRepository {
     }
 
     @Override
-    public void addCustomer(Customer customer) {
-        if (hasCustomer(customer))
-            throw new NoSuchElementException("Customer with name: " + customer.getName() + " and surname " + customer.getSurname() + " is already in repository");
+    public void addCustomer(Customer customer) throws CustomerException {
+        if (hasCustomer(customer)) {
+            String name = customer.getName();
+            String surname = customer.getSurname();
+            throw new CustomerException("Customer with name: " + name + " and surname " + surname + " is already in repository");
+        }
         customers.add(customer);
     }
 
@@ -39,7 +43,7 @@ public class LocalCustomerRepository implements CustomerRepository {
                     .collect(Collector.toSingleton());
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
-            throw new NoSuchElementException("[Not found] Customer with name " + name + " and surname " + surname + " not found or found more than one");
+            throw new NoSuchElementException("Customer with name " + name + " and surname " + surname + " not found or found more than one");
         }
     }
 

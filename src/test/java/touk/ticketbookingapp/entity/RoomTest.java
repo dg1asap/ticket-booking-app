@@ -2,6 +2,7 @@ package touk.ticketbookingapp.entity;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import touk.ticketbookingapp.exception.customer.CustomerException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,16 +72,19 @@ public class RoomTest {
         assertEquals(100, getNumberOfAvailableSeatsInRoomOnMovieShow(firstRoom, laterMovieShow));
         assertEquals(200, getNumberOfAvailableSeatsInRoomOnMovieShow(secondRoom, laterMovieShow));
 
-        Customer mark = new Customer("Mark", "Smith");
-        Customer eva = new Customer("Eva", "Polka");
-        Customer mike = new Customer("Mike", "Tyson");
+        try {
+            Customer mark = new Customer("Mark", "Smith");
+            Customer eva = new Customer("Eva", "Polka");
+            Customer mike = new Customer("Mike", "Tyson");
 
-        bookNSeatsInRoomOnMovieShowForCustomer(80, firstRoom, earlierMovieShow, mark);
-        bookNSeatsInRoomOnMovieShowForCustomer(50, secondRoom, earlierMovieShow, eva);
-        bookNSeatsInRoomOnMovieShowForCustomer(7, firstRoom, laterMovieShow, mike);
-        bookNSeatsInRoomOnMovieShowForCustomer(90, secondRoom, laterMovieShow, mike);
+            bookNSeatsInRoomOnMovieShowForCustomer(80, firstRoom, earlierMovieShow, mark);
+            bookNSeatsInRoomOnMovieShowForCustomer(50, secondRoom, earlierMovieShow, eva);
+            bookNSeatsInRoomOnMovieShowForCustomer(7, firstRoom, laterMovieShow, mike);
+            bookNSeatsInRoomOnMovieShowForCustomer(90, secondRoom, laterMovieShow, mike);
+        } catch (CustomerException e) {
+            System.out.println(e.getMessage());
+        }
 
-    //    assertEquals(20, getNumberOfAvailableSeatsInRoomOnMovieShow(firstRoom, earlierMovieShow));
         assertEquals(150, getNumberOfAvailableSeatsInRoomOnMovieShow(secondRoom, earlierMovieShow));
         assertEquals(93, getNumberOfAvailableSeatsInRoomOnMovieShow(firstRoom, laterMovieShow));
         assertEquals(110, getNumberOfAvailableSeatsInRoomOnMovieShow(secondRoom, laterMovieShow));

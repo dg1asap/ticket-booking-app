@@ -11,4 +11,9 @@ public class TicketOffice {
             default -> throw new NoSuchElementException("Relief type: " + reliefType + " don't exist");
         };
     }
+
+    public static boolean isReliefType(String reliefType) {
+        return reliefType.equals("adult") || reliefType.equals("student") || reliefType.equals("child");
+    }
+
 }

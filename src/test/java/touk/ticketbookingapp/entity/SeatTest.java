@@ -2,6 +2,7 @@ package touk.ticketbookingapp.entity;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import touk.ticketbookingapp.exception.customer.CustomerException;
 
 import java.time.LocalDateTime;
 
@@ -90,8 +91,12 @@ public class SeatTest {
     }
 
     private static void createCustomers() {
-        tom = new Customer("Tom", "Cat");
-        jerry = new Customer("Jerry", "Mouse");
+        try {
+            tom = new Customer("Tom", "Cat");
+            jerry = new Customer("Jerry", "Mouse");
+        } catch (CustomerException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void createMovesShows() {

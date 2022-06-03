@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import touk.ticketbookingapp.exception.customer.CustomerException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,9 +15,13 @@ public class CustomerTest {
 
     @BeforeAll
     public static void createCustomers() {
-        david = new Customer("David", "Jones");
-        will = new Customer("Will", "Smith");
-        grzegorz = new Customer("Grzegorz", "Brzęczyszczykiewicz");
+        try {
+            david = new Customer("David", "Jones");
+            will = new Customer("Will", "Smith");
+            grzegorz = new Customer("Grzegorz", "Brzęczyszczykiewicz");
+        } catch (CustomerException e) {
+            e.getMessage();
+        }
     }
 
     @ParameterizedTest
@@ -24,7 +29,7 @@ public class CustomerTest {
     void tooShortNameTest(String name) {
         String surname = "Surname";
         assertIllegalArgumentExceptionMessageInCustomerConstructor(name, surname,
-                "Name: " + name + " of customer is to short");
+                "Name: " + name + " of customer is too short, should be more than 2 letters");
 
     }
 
@@ -41,7 +46,7 @@ public class CustomerTest {
     void tooShortSurnameTest(String surname) {
         String name = "Name";
         assertIllegalArgumentExceptionMessageInCustomerConstructor(name, surname,
-                "Surname: " + surname + " of customer is too short");
+                "Surname: " + surname + " of customer is too short, should be more than 2 letters");
     }
 
     @ParameterizedTest
@@ -78,8 +83,12 @@ public class CustomerTest {
 
     @Test
     void setReliefTest() {
-        david.setRelief("student");
-        grzegorz.setRelief("child");
+        try {
+            david.setRelief("student");
+            grzegorz.setRelief("child");
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
 
         assertEquals(david.reliefType, "student");
         assertEquals(will.reliefType, "adult");
@@ -92,7 +101,12 @@ public class CustomerTest {
         will.addFeeForMovieShow(43112341);
         assertEquals(2*25, will.getSumOfFees());
 
-        grzegorz.setRelief("child");
+        try {
+           grzegorz.setRelief("child");
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
+
         grzegorz.addFeeForMovieShow(222);
         grzegorz.addFeeForMovieShow(42);
         grzegorz.addFeeForMovieShow(4444);
@@ -141,17 +155,21 @@ public class CustomerTest {
 
    @Test
    void equalsTest() {
-        Customer copyOfDavid = new Customer("David", "Jones");
+        try {
+            Customer copyOfDavid = new Customer("David", "Jones");
+            assertEquals(copyOfDavid.name, david.name);
+            assertEquals(copyOfDavid.surname, david.surname);
+        } catch (CustomerException e ) {
+            e.getMessage();
+        }
 
-        assertEquals(copyOfDavid.name, david.name);
-        assertEquals(copyOfDavid.surname, david.surname);
         assertNotEquals(david.name, will.name);
         assertNotEquals(david.name, grzegorz.name);
         assertNotEquals(will.surname, grzegorz.surname);
    }
 
    private void assertIllegalArgumentExceptionMessageInCustomerConstructor(String name, String surname, String message) {
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+        Throwable exception = assertThrows(CustomerException.class, () -> {
             Customer customer = new Customer(name, surname);
         });
         String exceptionMessage = exception.getMessage();
