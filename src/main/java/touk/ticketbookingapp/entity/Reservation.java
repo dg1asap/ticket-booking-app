@@ -1,8 +1,10 @@
 package touk.ticketbookingapp.entity;
 
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+
 import java.time.LocalDateTime;
 
-public class Reservation implements PeriodicEvent {
+public class Reservation implements TimeEvent {
     private final LocalDateTime start;
     private final LocalDateTime end;
     private final Customer booker;
@@ -23,6 +25,24 @@ public class Reservation implements PeriodicEvent {
         return this.booker == booker;
     }
 
+    public void setRoomNumber(int number) throws ReservationException {
+        if (this.roomNumber != 0)
+            throw new ReservationException("This reservation is already in use, you can't override room number");
+        this.roomNumber = number;
+    }
+
+    public void setRowOfSeat(int row) throws ReservationException {
+        if (this.row != 0)
+            throw new ReservationException("This reservation is already in use, you can't override row of seat");
+        this.row = row;
+    }
+
+    public void setColumnOfSeat(int column) throws ReservationException{
+        if (this.column != 0)
+            throw new ReservationException("This reservation is already in use, you can't override column of seat");
+        this.column = column;
+    }
+
     @Override
     public LocalDateTime getStart() {
         return start;
@@ -33,35 +53,16 @@ public class Reservation implements PeriodicEvent {
         return end;
     }
 
-    public void setRoomNumber(int number) throws IllegalAccessException {
-        if (this.roomNumber != 0)
-            throw new IllegalAccessException("This reservation is already in use, you can't override room number");
-        this.roomNumber = number;
-    }
-
     public int getRoomNumber() {
         return roomNumber;
-    }
-
-    public void setRowOfSeat(int row) throws IllegalAccessException {
-        if (this.row != 0)
-            throw new IllegalAccessException("This reservation is already in use, you can't override row of seat");
-        this.row = row;
     }
 
     public int getRowOfSeat() {
         return row;
     }
 
-    public void setColumnOfSeat(int column) throws IllegalAccessException {
-        if (this.column != 0)
-            throw new IllegalAccessException("This reservation is already in use, you can't override column of seat");
-        this.column = column;
-    }
-
     public int getColumnOfSeat() {
         return column;
     }
-
 
 }

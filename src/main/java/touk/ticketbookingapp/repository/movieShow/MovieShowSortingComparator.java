@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 
 public class MovieShowSortingComparator implements Comparator<MovieShow> {
+
+    //TODO Add support for Polish characters
     @Override
     public int compare(MovieShow firstShow, MovieShow secondShow) {
         String firstMovieTitle = firstShow.getMovie().getTittle();

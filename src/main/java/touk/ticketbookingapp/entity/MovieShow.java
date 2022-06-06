@@ -1,8 +1,10 @@
 package touk.ticketbookingapp.entity;
 
+import touk.ticketbookingapp.exception.room.BookSeatException;
+
 import java.time.LocalDateTime;
 
-public class MovieShow implements PeriodicEvent {
+public class MovieShow implements TimeEvent {
     private final int Id;
     private final Movie movie;
     private final LocalDateTime start;
@@ -15,22 +17,22 @@ public class MovieShow implements PeriodicEvent {
         this.end = end;
     }
 
-    public int getId() {
-        return Id;
+    public Reservation createReservationForCustomer(Customer customer) throws BookSeatException {
+        if (isAtLeastNMinutesBeforeMovie(15))
+            return new Reservation(start, end, customer);
+        throw new BookSeatException("Reservations can be made up to 15 minutes before the start of the screening");
     }
 
     public boolean hasId(int id) {
         return this.Id == id;
     }
 
-    public Movie getMovie() {
-        return movie;
+    public int getId() {
+        return Id;
     }
 
-    public Reservation createReservationForCustomer(Customer customer) throws IllegalAccessException {
-        if (isAtLeastNMinutesBeforeMovie(15))
-            return new Reservation(start, end, customer);
-        throw new IllegalAccessException("Reservations can be made up to 15 minutes before the start of the screening");
+    public Movie getMovie() {
+        return movie;
     }
 
     @Override
@@ -45,8 +47,7 @@ public class MovieShow implements PeriodicEvent {
 
     private boolean isAtLeastNMinutesBeforeMovie(int minutes) {
         LocalDateTime now = LocalDateTime.now();
-        return now.plusMinutes(15).isBefore(start);
+        return now.plusMinutes(minutes).isBefore(start);
     }
-
 
 }

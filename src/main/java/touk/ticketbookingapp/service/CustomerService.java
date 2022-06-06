@@ -1,13 +1,17 @@
 package touk.ticketbookingapp.service;
 
+import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import touk.ticketbookingapp.entity.*;
 import touk.ticketbookingapp.exception.customer.CustomerException;
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+import touk.ticketbookingapp.exception.room.BookSeatException;
 import touk.ticketbookingapp.repository.customer.CustomerRepository;
 import touk.ticketbookingapp.repository.movieShow.MovieShowRepository;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,31 +19,39 @@ import java.util.NoSuchElementException;
 public class CustomerService {
     private final MovieShowRepository movieShowRepository;
     private final CustomerRepository customerRepository;
+    private Checkout checkout;
 
     @Autowired
     public CustomerService(MovieShowRepository movieShowRepository, CustomerRepository customerRepository) {
         this.movieShowRepository = movieShowRepository;
         this.customerRepository = customerRepository;
+        createTicketOffice();
     }
 
-    public void bookingSeatOnMovieShowForCustomer(
+    public void bookingSeatOnMovieShowForCustomer (
             int seatId, int movieShowId, String nameOfCustomer, String surnameOfCustomer)
-            throws IllegalAccessException, IllegalStateException{
+            throws NoSuchElementException, BookSeatException, ReservationException {
 
         try {
-            Customer customer = getCustomerWithNameAndSurname(nameOfCustomer, surnameOfCustomer);
             MovieShow movieShow = movieShowRepository.getMovieShowWithId(movieShowId);
             Room room = movieShowRepository.getRoomByMovieShowId(movieShowId);
+            Customer customer = getCustomerWithNameAndSurname(nameOfCustomer, surnameOfCustomer);
+
+            String reliefType = customer.getReliefType();
+            Money fee = checkout.getTicketAmountInPLN(reliefType);
 
             Reservation reservation = movieShow.createReservationForCustomer(customer);
             room.bookSeatWithId(reservation, seatId);
-            customer.addFeeForMovieShow(movieShowId);
+            customer.addFeeForMovieShow(movieShowId, fee);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
-            throw new NoSuchElementException("Can't booking seat with id " + seatId + " on moveShow with id " + movieShowId + " for customer " + nameOfCustomer + " " + surnameOfCustomer + " because not found");
-        } catch (IllegalAccessException e) {
+            throw new NoSuchElementException("Can't book seat with id " + seatId + " on moveShow with id " + movieShowId + " for customer " + nameOfCustomer + " " + surnameOfCustomer + " because not found");
+        } catch (BookSeatException e) {
             System.out.println(e.getMessage());
-            throw new IllegalAccessException("Can't booking seat with id " + seatId + " on moveShow with id " + movieShowId + " for customer " + nameOfCustomer + " " + surnameOfCustomer + " because you don't have proper permission");
+            throw new BookSeatException("Can't book seat with id " + seatId + " on moveShow with id " + movieShowId + " for customer " + nameOfCustomer + " " + surnameOfCustomer + " because you don't have proper permission");
+        } catch (ReservationException e) {
+            System.out.println(e.getMessage());
+            throw new BookSeatException("Can't book seat with id " + seatId + " on moveShow with id " + movieShowId + " for customer " + nameOfCustomer + " " + surnameOfCustomer + " because is invalid reservation");
         }
     }
 
@@ -55,16 +67,16 @@ public class CustomerService {
         }
     }
 
-    public void setCustomerReliefType(String name, String surname, String reliefType) throws IllegalAccessException {
+    public void setCustomerReliefType(String name, String surname, String reliefType) {
+        if (!checkout.hasReliefType(reliefType))
+            throw new IllegalArgumentException("Can't set customer " + name + " " + surname + " relief type because relief type " + reliefType + " don't exist");
+
         try {
             Customer customer = getCustomerWithNameAndSurname(name, surname);
             customer.setRelief(reliefType);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
             throw new NoSuchElementException("Can't set customer relief type because not found customer with name " + name + " and surname " + surname);
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-            throw new IllegalAccessException("Can't set customer " + name + " " + surname + " relief type because " + name + " " + surname + " have not permission to set " + reliefType + " relief type");
         }
     }
 
@@ -102,4 +114,13 @@ public class CustomerService {
             throw new NoSuchElementException("Can't get reservations of customer " + name + " " + surname);
         }
     }
+
+    private void createTicketOffice() {
+        HashMap<String, Money> ticketTypeFees = new HashMap<>();
+        ticketTypeFees.put("adult", Money.of(25.00, "PLN"));
+        ticketTypeFees.put("student", Money.of(18.00, "PLN"));
+        ticketTypeFees.put("child", Money.of(12.50, "PLN"));
+        this.checkout = new Checkout(ticketTypeFees);
+    }
+
 }

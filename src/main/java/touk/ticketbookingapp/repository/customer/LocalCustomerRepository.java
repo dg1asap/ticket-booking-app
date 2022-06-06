@@ -35,6 +35,7 @@ public class LocalCustomerRepository implements CustomerRepository {
         return customers.stream()
                 .anyMatch(customer1 -> customer1.hasName(name) && customer1.hasSurname(surname));
     }
+
     @Override
     public Customer getCustomerWithNameAndSurname(String name, String surname) {
         try {

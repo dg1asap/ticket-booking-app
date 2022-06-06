@@ -3,6 +3,7 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import touk.ticketbookingapp.exception.customer.CustomerException;
+import touk.ticketbookingapp.exception.reservation.ReservationException;
 
 import java.time.LocalDateTime;
 
@@ -64,7 +65,7 @@ public class ReservationTest {
         try {
             firstReservation.setRoomNumber(1);
             secondReservation.setRoomNumber(13);
-        } catch (IllegalAccessException e) {
+        } catch (ReservationException e) {
             System.out.println(e.getMessage());
         }
 
@@ -77,7 +78,7 @@ public class ReservationTest {
         try {
             firstReservation.setRowOfSeat(12);
             secondReservation.setRowOfSeat(2);
-        } catch (IllegalAccessException e) {
+        } catch (ReservationException e) {
             System.out.println(e.getMessage());
         }
 
@@ -90,7 +91,7 @@ public class ReservationTest {
         try {
             firstReservation.setColumnOfSeat(11);
             secondReservation.setColumnOfSeat(3);
-        } catch (IllegalAccessException e) {
+        } catch (ReservationException e) {
             System.out.println(e.getMessage());
         }
 

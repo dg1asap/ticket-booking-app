@@ -26,8 +26,8 @@ public class MovieShowService {
         }
     }
 
-    public List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime fromCalendar, LocalDateTime toCalendar) {
-        return repository.getSortedMovieShowsInPeriod(fromCalendar, toCalendar);
+    public List<MovieShow> getSortedMovieShowsBetween(LocalDateTime fromCalendar, LocalDateTime toCalendar) {
+        return repository.getSortedMovieShowsBetween(fromCalendar, toCalendar);
     }
 
     public Room getRoomByMovieShowId(int id) throws NoSuchElementException {

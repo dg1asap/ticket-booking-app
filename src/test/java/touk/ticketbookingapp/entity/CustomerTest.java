@@ -1,5 +1,6 @@
 package touk.ticketbookingapp.entity;
 
+import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -83,12 +84,8 @@ public class CustomerTest {
 
     @Test
     void setReliefTest() {
-        try {
-            david.setRelief("student");
-            grzegorz.setRelief("child");
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
+        david.setRelief("student");
+        grzegorz.setRelief("child");
 
         assertEquals(david.reliefType, "student");
         assertEquals(will.reliefType, "adult");
@@ -97,28 +94,32 @@ public class CustomerTest {
 
    @Test
    void addFeeForMovieShowsAndGetSumOfFeesTest() {
-        will.addFeeForMovieShow(222);
-        will.addFeeForMovieShow(43112341);
-        assertEquals(2*25, will.getSumOfFees());
+        Money willFee = Money.of(25.00, "PLN");
+        assertEquals(willFee.toString(), "PLN 25");
+        will.addFeeForMovieShow(222, willFee);
+        will.addFeeForMovieShow(43112341, willFee);
+        String expectedWillSum = "PLN " + 2*25;
+        assertEquals(expectedWillSum, will.getSumOfFees().toString());
 
-        try {
-           grzegorz.setRelief("child");
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
-
-        grzegorz.addFeeForMovieShow(222);
-        grzegorz.addFeeForMovieShow(42);
-        grzegorz.addFeeForMovieShow(4444);
-        assertEquals(3*12.5, grzegorz.getSumOfFees());
+        Money grzegorzFee = Money.of(12.50, "PLN");
+        grzegorz.setRelief("child");
+        grzegorz.addFeeForMovieShow(222, grzegorzFee);
+        grzegorz.addFeeForMovieShow(42, grzegorzFee);
+        grzegorz.addFeeForMovieShow(4444, grzegorzFee);
+        String expectedGrzegorzSum = "PLN " + 3*12.5;
+        assertEquals(expectedGrzegorzSum, grzegorz.getSumOfFees().toString());
    }
 
    @Test
    void getIdOfMovieShowsToPaidTest() {
-       will.addFeeForMovieShow(223);
-       will.addFeeForMovieShow(11);
-       grzegorz.addFeeForMovieShow(1324);
-       grzegorz.addFeeForMovieShow(99909);
+       Money willFee = Money.of(25.00, "PLN");
+       will.addFeeForMovieShow(223, willFee);
+       will.addFeeForMovieShow(11, willFee);
+
+       Money grzegorzFee = Money.of(12.5, "PLN");
+
+       grzegorz.addFeeForMovieShow(1324, grzegorzFee);
+       grzegorz.addFeeForMovieShow(99909, grzegorzFee);
 
        assertTrue(will.getIdOfMovieShowsToPaid().contains(223));
        assertTrue(will.getIdOfMovieShowsToPaid().contains(11));

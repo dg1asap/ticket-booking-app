@@ -7,12 +7,11 @@ import java.util.*;
 
 public interface MovieShowRepository {
     void addMovieShowAndRoom(MovieShow movieShow, Room room);
-    Set<MovieShow> getMovieShows();
-    List<Room> getRooms();
-    List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime from, LocalDateTime to);
-    Room getRoomByMovieShowId(int id) throws IllegalStateException;
-    Room getRoomWithId(int roomNumber);
     MovieShow getMovieShowWithId(int id);
-
+    Set<MovieShow> getMovieShows();
+    List<MovieShow> getSortedMovieShowsBetween(LocalDateTime from, LocalDateTime to);
+    Room getRoomWithId(int roomNumber);
+    Room getRoomByMovieShowId(int id) throws NoSuchElementException;
+    List<Room> getRooms();
 
 }

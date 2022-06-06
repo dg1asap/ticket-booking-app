@@ -32,15 +32,16 @@ public class MovieShowController {
         }
     }
 
+    // TODO consider ISO format
     //example format:   7:20-1/2/2022
-    @GetMapping("/period/")
-    public ResponseEntity<List<MovieShow>> getMovieShowsInPeriod(
+    @GetMapping("/")
+    public ResponseEntity<List<MovieShow>> getMovieShowsBetween (
             @RequestParam("from") String fromAsString,  @RequestParam("to") String toAsString) {
 
         try {
             LocalDateTime form = StringToLocalDateTimeConverter.convert(fromAsString);
             LocalDateTime to = StringToLocalDateTimeConverter.convert(toAsString);
-            List<MovieShow> movieShows = service.getSortedMovieShowsInPeriod(form, to);
+            List<MovieShow> movieShows = service.getSortedMovieShowsBetween(form, to);
             return new ResponseEntity<>(movieShows, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
@@ -69,6 +70,5 @@ public class MovieShowController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
-
 
 }

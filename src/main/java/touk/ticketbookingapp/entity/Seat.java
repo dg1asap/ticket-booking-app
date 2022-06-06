@@ -1,19 +1,48 @@
 package touk.ticketbookingapp.entity;
 
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Seat {
     private final int id;
-    private final int posX;
-    private final int posY;
+    private final int row;
+    private final int column;
     private List<Reservation> reservations;
 
-    public Seat(int id, int posX, int posY) {
+    public Seat(int id, int row, int column) {
         this.id = id;
+        this.row = row;
+        this.column = column;
         this.reservations = new ArrayList<>();
-        this.posX = posX;
-        this.posY = posY;
+    }
+
+    public boolean hasSameId(Seat checkedSeat) {
+        return this.id == checkedSeat.id;
+    }
+
+    public boolean hasReservationOnMovieShow(MovieShow movieShow) {
+        return reservations.stream()
+                .anyMatch(reservations -> reservations.isOverlappingWith(movieShow));
+    }
+
+    public boolean hasReservationOverlapsWithReservation(Reservation checkedReservation) {
+        return reservations.stream()
+                .anyMatch(reservation -> reservation.isOverlappingWith(checkedReservation));
+    }
+
+    public void book(Reservation reservation) throws ReservationException {
+        try {
+            if (canBook(reservation)) {
+                reservation.setRowOfSeat(row);
+                reservation.setColumnOfSeat(column);
+                reservations.add(reservation);
+            }
+        } catch (ReservationException e) {
+            System.out.println(e.getMessage());
+            throw new ReservationException("Can't use reservation and book seat in row " + reservation.getRowOfSeat() + " and column " + reservation.getColumnOfSeat());
+        }
     }
 
     public int getId() {
@@ -24,34 +53,12 @@ public class Seat {
         return this.id == id;
     }
 
-    public boolean hasSameId(Seat checkedSeat) {
-        return this.id == checkedSeat.id;
-    }
-
     public int getRow() {
-        return posX;
+        return row;
     }
 
     public int getColumn() {
-        return posY;
-    }
-
-    public void book(Reservation reservation) throws IllegalAccessException {
-        if (canBook(reservation)) {
-            reservation.setRowOfSeat(posX);
-            reservation.setColumnOfSeat(posY);
-            reservations.add(reservation);
-        }
-    }
-
-    public boolean hasReservationOnMovieShow(MovieShow movieShow) {
-        return reservations.stream()
-            .anyMatch(reservations -> reservations.isOverlappingWith(movieShow));
-    }
-
-    public boolean hasReservationOverlapsWithReservation(Reservation checkedReservation) {
-        return reservations.stream()
-                .anyMatch(reservation -> reservation.isOverlappingWith(checkedReservation));
+        return column;
     }
 
     public List<Reservation> getReservationsOfCustomer (Customer customer) {

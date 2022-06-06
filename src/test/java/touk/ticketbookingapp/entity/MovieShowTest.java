@@ -3,6 +3,7 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import touk.ticketbookingapp.exception.customer.CustomerException;
+import touk.ticketbookingapp.exception.room.BookSeatException;
 
 import java.time.LocalDateTime;
 
@@ -73,7 +74,7 @@ public class MovieShowTest {
             assertTrue(evaSecondReservation.belongsToCustomer(eva));
 
             assertFalse(evaReservation.belongsToCustomer(tom));
-        } catch (IllegalAccessException | CustomerException e) {
+        } catch (CustomerException | BookSeatException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -105,7 +106,7 @@ public class MovieShowTest {
             assertFalse(firstMovieShow.isOverlappingWith(evaReservation));
             assertTrue(secondMovieShow.isOverlappingWith(evaReservation));
             assertFalse(thirdMovieShow.isOverlappingWith(evaReservation));
-        } catch (IllegalAccessException | CustomerException e) {
+        } catch (BookSeatException | CustomerException e) {
             System.out.println(e.getMessage());
         }
     }

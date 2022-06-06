@@ -2,12 +2,12 @@ package touk.ticketbookingapp.entity;
 
 import java.time.LocalDateTime;
 
-public interface PeriodicEvent {
+public interface TimeEvent {
     LocalDateTime getStart();
 
     LocalDateTime getEnd();
 
-    default boolean isOverlappingWith(PeriodicEvent event) {
+    default boolean isOverlappingWith(TimeEvent event) {
         LocalDateTime thisStart = this.getStart();
         LocalDateTime thisEnd = this.getEnd();
 

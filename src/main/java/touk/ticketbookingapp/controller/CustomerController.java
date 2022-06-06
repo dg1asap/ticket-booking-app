@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import touk.ticketbookingapp.entity.Customer;
 import touk.ticketbookingapp.entity.Reservation;
 import touk.ticketbookingapp.exception.customer.CustomerException;
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+import touk.ticketbookingapp.exception.room.BookSeatException;
 import touk.ticketbookingapp.service.CustomerService;
 
 import java.util.List;
@@ -34,6 +36,21 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/reservation/")
+    public ResponseEntity<List<Reservation>> getReservationsOfCustomer(
+            @RequestParam("name-of-customer") String nameOfCustomer,
+            @RequestParam("surname-of-customer") String surnameOfCustomer) {
+
+        try {
+            List<Reservation> reservations = service.getReservationOfCustomer(
+                    nameOfCustomer, surnameOfCustomer);
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/reservation/movie-show/{movie-show-id}/")
     public ResponseEntity<List<Reservation>> getReservationsOnMovieShowForCustomer(
             @PathVariable("movie-show-id") int movieShowId,
@@ -43,21 +60,6 @@ public class CustomerController {
         try {
             List<Reservation> reservations = service.getReservationsOfCustomerOnMovieShow(
                     nameOfCustomer, surnameOfCustomer, movieShowId);
-            return new ResponseEntity<>(reservations, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/reservation/")
-    public ResponseEntity<List<Reservation>> getReservationsOfCustomer(
-            @RequestParam("name-of-customer") String nameOfCustomer,
-            @RequestParam("surname-of-customer") String surnameOfCustomer) {
-
-        try {
-            List<Reservation> reservations = service.getReservationOfCustomer(
-                    nameOfCustomer, surnameOfCustomer);
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
@@ -77,10 +79,10 @@ public class CustomerController {
         try {
             service.bookingSeatOnMovieShowForCustomer(seatId, movieShowId, name, surname);
             return new ResponseEntity<>(customerPrototype, HttpStatus.OK);
-        } catch (IllegalStateException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(customerPrototype, HttpStatus.NOT_FOUND);
-        } catch (IllegalAccessException e) {
+        } catch (BookSeatException | ReservationException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(customerPrototype, HttpStatus.BAD_REQUEST);
         }
@@ -95,7 +97,7 @@ public class CustomerController {
         try {
             service.setCustomerReliefType(name, surname, reliefType);
             return new ResponseEntity<>(reliefType, HttpStatus.OK);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(reliefType, HttpStatus.CONFLICT);
         }

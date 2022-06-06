@@ -3,6 +3,8 @@ package touk.ticketbookingapp.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import touk.ticketbookingapp.exception.customer.CustomerException;
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+import touk.ticketbookingapp.exception.room.BookSeatException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -106,7 +108,7 @@ public class RoomTest {
                 int seatID = seat.getId();
                 room.bookSeatWithId(reservation, seatID);
             }
-        } catch (IllegalAccessException e) {
+        } catch (BookSeatException | ReservationException e) {
             System.out.println(e.getMessage());
         }
     }

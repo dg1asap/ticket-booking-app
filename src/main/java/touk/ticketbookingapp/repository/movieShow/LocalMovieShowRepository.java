@@ -22,6 +22,18 @@ public class LocalMovieShowRepository implements MovieShowRepository {
     }
 
     @Override
+    public MovieShow getMovieShowWithId(int id) {
+        try {
+            return movieShowRoomMap.keySet().stream()
+                    .filter(movieShow -> movieShow.hasId(id))
+                    .collect(Collector.toSingleton());
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            throw new NoSuchElementException("Movie show with id " + id + " not found");
+        }
+    }
+
+    @Override
     public Set<MovieShow> getMovieShows() {
         if (movieShowRoomMap.size() == 0)
             throw new NoSuchElementException("Movie show database is clear");
@@ -29,25 +41,9 @@ public class LocalMovieShowRepository implements MovieShowRepository {
     }
 
     @Override
-    public List<Room> getRooms() {
-        return movieShowRoomMap.values().stream().toList();
-    }
-
-    @Override
-    public List<MovieShow> getSortedMovieShowsInPeriod(LocalDateTime from, LocalDateTime to) {
-            List<MovieShow> movieShows = getMovieShowsInPeriod(from, to);
-            return sortMovieShowsByTitleAndStart(movieShows);
-    }
-
-    @Override
-    public Room getRoomByMovieShowId(int id) throws IllegalStateException {
-        try {
-            MovieShow movieShow = getMovieShowWithId(id);
-            return movieShowRoomMap.get(movieShow);
-        } catch(NoSuchElementException e) {
-            System.out.println(e.getMessage());
-            throw new NoSuchElementException("Not found room by movie show id " + id);
-        }
+    public List<MovieShow> getSortedMovieShowsBetween(LocalDateTime from, LocalDateTime to) {
+        List<MovieShow> movieShows = getMovieShowsInPeriod(from, to);
+        return sortMovieShowsByTitleAndStart(movieShows);
     }
 
     @Override
@@ -63,15 +59,19 @@ public class LocalMovieShowRepository implements MovieShowRepository {
     }
 
     @Override
-    public MovieShow getMovieShowWithId(int id) {
+    public Room getRoomByMovieShowId(int id) throws NoSuchElementException {
         try {
-            return movieShowRoomMap.keySet().stream()
-                    .filter(movieShow -> movieShow.hasId(id))
-                    .collect(Collector.toSingleton());
-        } catch (IllegalStateException e) {
+            MovieShow movieShow = getMovieShowWithId(id);
+            return movieShowRoomMap.get(movieShow);
+        } catch(NoSuchElementException e) {
             System.out.println(e.getMessage());
-            throw new NoSuchElementException("Movie show with id " + id + " not found");
+            throw new NoSuchElementException("Not found room by movie show id " + id);
         }
+    }
+
+    @Override
+    public List<Room> getRooms() {
+        return movieShowRoomMap.values().stream().toList();
     }
 
     private List<MovieShow> getMovieShowsInPeriod(LocalDateTime from, LocalDateTime to) {
@@ -85,6 +85,5 @@ public class LocalMovieShowRepository implements MovieShowRepository {
         modifiableMovieShows.sort(new MovieShowSortingComparator());
         return modifiableMovieShows;
     }
-
 
 }

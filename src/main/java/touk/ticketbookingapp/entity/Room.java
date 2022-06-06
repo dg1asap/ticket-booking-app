@@ -1,11 +1,15 @@
 package touk.ticketbookingapp.entity;
 
+import touk.ticketbookingapp.exception.reservation.ReservationException;
+import touk.ticketbookingapp.exception.room.BookSeatException;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 
 public class Room {
     private final int number;
-    private List <Seat> seats;
+    private final List <Seat> seats;
+
     public Room(int number) {
         this.number = number;
         seats = new ArrayList<>();
@@ -20,24 +24,31 @@ public class Room {
         }
     }
 
-    public int getNumber() {
-        return number;
-    }
-
     public boolean hasNumber(int number) {
         return this.number == number;
     }
 
-    public void bookSeatWithId(Reservation reservation, int seatId) throws IllegalAccessException {
+    public void bookSeatWithId(Reservation reservation, int seatId)
+            throws ReservationException, NoSuchElementException, BookSeatException {
+
         if (!hasSeatWithId(seatId))
             throw new NoSuchElementException("In room with number: " + number + " is no seat with id: " + seatId);
 
         Seat seat = getSeatWithId(seatId);
         if (seat.hasReservationOverlapsWithReservation(reservation))
-            throw new IllegalAccessException("In room with number: " + number + " seat with id: " + seatId + " is already booked");
+            throw new BookSeatException("In room with number: " + number + " seat with id: " + seatId + " is already booked");
 
-        bookSeat(reservation, seat);
+        try {
+            seat.book(reservation);
+        } catch (ReservationException e) {
+            System.out.println(e.getMessage());
+            throw new ReservationException("Can't book seat with id " + seatId + " because is invalid reservation");
+        }
         setRoomNumberToReservation(reservation);
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public List<Seat> getAvailableSeatsOnMovieShow(MovieShow movieShow) {
@@ -66,10 +77,6 @@ public class Room {
             throw new InvalidParameterException("seat id");
     }
 
-    private boolean hasSeatWithSameId(Seat checkedSeat) {
-        return seats.stream().anyMatch(seat -> seat.hasSameId(checkedSeat));
-    }
-
     private boolean hasSeatWithId(int id) {
         return seats.stream().anyMatch(seat -> seat.hasId(id));
     }
@@ -81,22 +88,25 @@ public class Room {
         throw new NoSuchElementException("In room with number: " + number + " is no seat with id: " + id);
     }
 
-    private void bookSeat(Reservation reservation, Seat seat) {
-        try {
-            seat.book(reservation);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private void setRoomNumberToReservation(Reservation reservation) {
         try {
             reservation.setRoomNumber(number);
-        } catch (IllegalAccessException e) {
+        } catch (ReservationException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    private boolean hasSeatWithSameId(Seat checkedSeat) {
+        return seats.stream().anyMatch(seat -> seat.hasSameId(checkedSeat));
+    }
 
+    private void bookSeat(Reservation reservation, Seat seat) throws ReservationException {
+        try {
+            seat.book(reservation);
+        } catch (ReservationException e) {
+            System.out.println(e.getMessage());
+            throw new ReservationException("Can't book seat with id" + seat.getId());
+        }
+    }
 
 }

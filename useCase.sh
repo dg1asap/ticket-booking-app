@@ -3,7 +3,7 @@
 # creating a menu with the following options
 echo "COMMAND LIST"
 echo "1. GET /movie-shows"
-echo "2. GET /movie-shows/period/"
+echo "2. GET /movie-shows/"
 echo "3. GET /movie-shows/{id}/room"
 echo "4. GET /movie-shows/{id}/available-seats"
 echo "5. GET /customer/"
@@ -31,7 +31,7 @@ case $choice in
       echo "You have selected the option 1"
       echo " ";;
   # Pattern 2
-  2)  curl http://localhost:8080/movie-shows/period/\?from\=16:00-5/5/2022\&to\=23:00-22/12/2022 | json_pp;
+  2)  curl http://localhost:8080/movie-shows/\?from\=16:00-5/5/2022\&to\=23:00-22/12/2022 | json_pp;
       echo "You have selected the option 2"
       echo "This option";;
   # Pattern 3
