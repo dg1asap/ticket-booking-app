@@ -66,7 +66,6 @@ public class MovieShowRepositoryInitializer {
         addNSeatToRoom(200, room3);
         addNSeatToRoom(200, room4);
 
-        repository.addMovieShowAndRoom(movieShow1,room1);
         repository.addMovieShowAndRoom(movieShow1, room1);
         repository.addMovieShowAndRoom(movieShow2, room1);
         repository.addMovieShowAndRoom(movieShow3, room1);
